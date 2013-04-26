@@ -27,7 +27,7 @@ These will download the nuget packages and install the SDK into your project and
 
 4. From the Cordova Facebook Connect Plugin [https://github.com/phonegap-build/FacebookConnect] folder copy the `www/cdv-plugin-fb-connect.js`, `www/facebook-js-sdk.js` into your application's `assets/www` folder. 
 
-5. From the Facebook folder copy the Connect.cs file into you WP8 Cordova project under <pre>cordovalib\Commands</pre> folder.
+5. From the Facebook folder copy the Connect.cs file into you WP8 Cordova project under: <pre>cordovalib\Commands</pre>.
 
 6. Edit index.html file and add both js files inside the body tag:
 <pre>
@@ -58,7 +58,7 @@ These will download the nuget packages and install the SDK into your project and
       });
   </script>
   </pre>
-Now you are ready to create your application! Check out the `example` folder for what the HTML, JS etc looks like.
+
 
 You can run the application from either Visual Studio Emulator or deploy to your Windows Phone 8 device.
 
