@@ -23,15 +23,17 @@ Once the powershell command prompt is running, type the following two commands
 
 These will download the nuget packages and install the SDK into your project and add it to the references.
 
-4. From the Cordova Facebook Connect Plugin folder copy the `www/cdv-plugin-fb-connect.js`, `www/facebook-js-sdk.js` into your application's `assets/www` folder. 
+4. From the Cordova Facebook Connect Plugin [https://github.com/phonegap-build/FacebookConnect] folder copy the `www/cdv-plugin-fb-connect.js`, `www/facebook-js-sdk.js` into your application's `assets/www` folder. 
 
 5. Edit index.html file and add both js files inside the body tag:
+<pre>
   <!-- cordova facebook plugin -->
   <script src="cdv-plugin-fb-connect.js"></script>
   <!-- facebook js sdk -->
   <script src="facebook-js-sdk.js"></script> 
-
+</pre>
 6. Finally add the following code below the previous code you add to start Facebook api:
+<pre>
 <script>
       // Initialize the Facebook SDK
       document.addEventListener('deviceready', function() {
@@ -50,7 +52,7 @@ These will download the nuget packages and install the SDK into your project and
 	  
       });
   </script>
-  
+  </pre>
 Now you are ready to create your application! Check out the `example` folder for what the HTML, JS etc looks like.
 
 You can run the application from either Visual Studio Emulator or deploy to your Windows Phone 8 device.
