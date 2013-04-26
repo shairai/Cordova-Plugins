@@ -27,10 +27,10 @@ These will download the nuget packages and install the SDK into your project and
 
 5. Edit index.html file and add both js files inside the body tag:
 <pre>
-  <!-- cordova facebook plugin -->
-  <script src="cdv-plugin-fb-connect.js"></script>
-  <!-- facebook js sdk -->
-  <script src="facebook-js-sdk.js"></script> 
+  &lt;!-- cordova facebook plugin --&gt;
+  &lt;script src="cdv-plugin-fb-connect.js"&gt;&lt;/script&gt;
+  &lt;!-- facebook js sdk --&gt;
+  &lt;script src="facebook-js-sdk.js"&gt;&lt;/script&gt; 
 </pre>
 6. Finally add the following code below the previous code you add to start Facebook api:
 <pre>
