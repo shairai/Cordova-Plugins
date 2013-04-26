@@ -17,22 +17,27 @@ This facebook plugin uses Facebook SDK for .NET and compatible with FacebookConn
 
 3. Install the Facebook nuget package into the solution by starting the Package Manager powershell by following:
 Tools->Library Package Manager->Package Manager console
-Once the powershell command prompt is running, type the following two commands
+Once the powershell command prompt is running, type the following two commands:
+<pre>
 "Install-Package Facebook"
 "Install-Package Facebook.Client -pre"
+</pre>
 
 These will download the nuget packages and install the SDK into your project and add it to the references.
 
 4. From the Cordova Facebook Connect Plugin [https://github.com/phonegap-build/FacebookConnect] folder copy the `www/cdv-plugin-fb-connect.js`, `www/facebook-js-sdk.js` into your application's `assets/www` folder. 
 
-5. Edit index.html file and add both js files inside the body tag:
+5. From the Facebook folder copy the Connect.cs file into you WP8 Cordova project under <pre>cordovalib\Commands</pre> folder.
+
+6. Edit index.html file and add both js files inside the body tag:
 <pre>
   &lt;!-- cordova facebook plugin --&gt;
   &lt;script src="cdv-plugin-fb-connect.js"&gt;&lt;/script&gt;
   &lt;!-- facebook js sdk --&gt;
   &lt;script src="facebook-js-sdk.js"&gt;&lt;/script&gt; 
 </pre>
-6. Finally add the following code below the previous code you add to start Facebook api:
+
+7. Finally add the following code below the previous code you add to start Facebook api:
 <pre>
 <script>
       // Initialize the Facebook SDK
