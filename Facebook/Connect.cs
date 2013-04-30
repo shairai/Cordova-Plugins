@@ -21,7 +21,6 @@ namespace org.apache.cordova.facebook
         public Connect()
         {
             Settings = IsolatedStorageSettings.ApplicationSettings;
-            // clearing it would screw up any other class that was using application settings
         }
 
         private static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -59,8 +58,8 @@ namespace org.apache.cordova.facebook
 
                 DateTime access_expires;
 
-                Settings.TryGetValue<string>("fb_access_token", out AccessToken);
-                Settings.TryGetValue<DateTime>("fb_access_expires", out  access_expires);
+                Settings.TryGetValue<string>("access_token", out AccessToken);
+                Settings.TryGetValue<DateTime>("access_expires", out  access_expires);
 
                 if (AccessToken != null)
                     this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
@@ -81,10 +80,10 @@ namespace org.apache.cordova.facebook
 
         private void RemoveLocalData()
         {
-            if (Settings.Contains("fb_access_token"))
-                Settings.Remove("fb_access_token");
-            if (Settings.Contains("fb_access_expires"))
-                Settings.Remove("fb_access_expires");
+            if (Settings.Contains("access_token"))
+                Settings.Remove("access_token");
+            if (Settings.Contains("access_expires"))
+                Settings.Remove("access_expires");
             Settings.Save();
         }
 
@@ -134,8 +133,8 @@ namespace org.apache.cordova.facebook
                     else
                     {
                         RemoveLocalData();
-                        Settings.Add("fb_access_token", session.AccessToken);
-                        Settings.Add("fb_access_expires", session.Expires);
+                        Settings.Add("access_token", session.AccessToken);
+                        Settings.Add("access_expires", session.Expires);
                         Settings.Save();
 
                         this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, this.getResponse()));
