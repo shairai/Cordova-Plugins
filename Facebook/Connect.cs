@@ -20,7 +20,7 @@ namespace org.apache.cordova.facebook
     {
         public Connect()
         {
-            Settings = IsolatedStorageSettings.ApplicationSettings;            
+            Settings = IsolatedStorageSettings.ApplicationSettings;
         }
 
         private static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -115,6 +115,18 @@ namespace org.apache.cordova.facebook
             return response;
         }
 
+        private string ParseScopes(string scope)
+        {
+            if (string.IsNullOrEmpty(scope)) return "";
+
+            var scopes = WPCordovaClassLib.Cordova.JSON.JsonHelper.Deserialize<string[]>(scope);
+            var sb = new StringBuilder();
+            foreach (var val in scopes)
+                sb.Append(val + ",");
+
+            return sb.ToString();
+        }
+
         public void login(string scope)
         {
             try
@@ -125,9 +137,11 @@ namespace org.apache.cordova.facebook
                     return;
                 }
 
+                var scopes = ParseScopes(scope);
+
                 Deployment.Current.Dispatcher.BeginInvoke(async () =>
                 {
-                    session = await FacebookSessionClient.LoginAsync(scope);
+                    session = await FacebookSessionClient.LoginAsync(scopes);
                     if (string.IsNullOrEmpty(session.AccessToken))
                         this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
                     else
@@ -171,7 +185,7 @@ namespace org.apache.cordova.facebook
                 if (session != null)
                     this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, this.getResponse()));
                 else
-                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));//this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Must call init before getLoginStatus."));
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
             }
             catch (Exception ex)
             {
