@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Facebook.Client</id>
+    <version>0.5.0-alpha</version>
+    <title />
+    <authors>Outercurve Foundation</authors>
+    <owners>Outercurve Foundation</owners>
+    <licenseUrl>https://github.com/facebook-csharp-sdk/facebook-winclient-sdk/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/facebook-csharp-sdk/facebook-winclient-sdk</projectUrl>
+    <iconUrl>http://csharpsdk.org/assets/img/logo75x75.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The Facebook SDK for Windows &amp; Windows Phone helps .Net developers build phone and Windows Store applications that integrate with Facebook.</description>
+    <language>en-US</language>
+    <tags>Facebook fb</tags>
+    <dependencies>
+      <group>
+        <dependency id="Facebook" version="6.3" />
+      </group>
+      <group targetFramework="WindowsPhone7.1">
+        <dependency id="Facebook" version="6.3" />
+        <dependency id="Microsoft.Bcl.Async" version="1.0" />
+      </group>
+    </dependencies>
+    <references>
+      <reference file="Facebook.Client.dll" />
+    </references>
+  </metadata>
+</package>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Facebook.Client</name>
+    </assembly>
+    <members>
+        <member name="M:Facebook.Client.FacebookSessionClient.Logout">
+            <summary>
+            Log a user out of Facebook.
+            </summary>
+        </member>
+        <member name="T:Facebook.Client.FacebookDialogPage">
+            <summary>
+            An empty page that can be used on its own or navigated to within a Frame.
+            </summary>
+        </member>
+        <member name="M:Facebook.Client.FacebookDialogPage.OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs)">
+            <summary>
+            Invoked when this page is about to be displayed in a Frame.
+            </summary>
+            <param name="e">Event data that describes how this page was reached.  The Parameter
+            property is typically used to configure the page.</param>
+        </member>
+    </members>
+</doc>
