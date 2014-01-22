@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using WPCordovaClassLib.Cordova;
 using WPCordovaClassLib.Cordova.Commands;
+using WPCordovaClassLib.Cordova.JSON;
 
 namespace org.apache.cordova.facebook
 {
@@ -40,29 +41,32 @@ namespace org.apache.cordova.facebook
             session = await FacebookSessionClient.LoginAsync();
         }
 
-        public void init(string args)
+        /**
+         * TODO This function isn't implemented completely. View the similar code for the android plugin https://github.com/phonegap/phonegap-facebook-plugin.git.
+         */
+        public void init(string options)
         {
-            var pr = new PluginResult(PluginResult.Status.OK);
-            pr.KeepCallback = true;
-
             try
             {
-                if (string.IsNullOrEmpty(args))
+                if (string.IsNullOrEmpty(options))
                 {
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "You must supply Facebook Application Key"));
-                    return;
+                    throw new Exception("Invalid JSON args used. Expected a Facebook Application Key as the first arg.");
                 }
 
-                var _args = WPCordovaClassLib.Cordova.JSON.JsonHelper.Deserialize<string[]>(args);
-                FacebookSessionClient = new FacebookSessionClient(_args[0]);
+                string[] args = JsonHelper.Deserialize<string[]>(options);
+                // TODO Validate whether the first element of the array exists or not.
+                string facebookAppId = args[0];
+                FacebookSessionClient = new FacebookSessionClient(facebookAppId);
 
+                // TODO Validate value of this variable. For now this variable is unused.
                 DateTime access_expires;
 
                 Settings.TryGetValue<string>("access_token", out AccessToken);
                 Settings.TryGetValue<DateTime>("access_expires", out  access_expires);
 
                 if (AccessToken != null)
-                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
+                    // TODO Request facebook user profile with this access token. Return the authResponse if the access token is valid.
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
                 else
                     DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
             }
@@ -115,43 +119,45 @@ namespace org.apache.cordova.facebook
             return response;
         }
 
-        private string ParseScopes(string scope)
-        {
-            if (string.IsNullOrEmpty(scope)) return "";
-
-            var scopes = WPCordovaClassLib.Cordova.JSON.JsonHelper.Deserialize<string[]>(scope);
-            var sb = new StringBuilder();
-            foreach (var val in scopes)
-                sb.Append(val + ",");
-
-            return sb.ToString();
-        }
-
-        public void login(string scope)
+        public void login(string options)
         {
             try
             {
-                if (FacebookSessionClient != null && FacebookSessionClient.LoginInProgress)
+                if (FacebookSessionClient == null)
+                {
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Must call init before login."));
+                    return;
+                }
+
+                if (FacebookSessionClient.LoginInProgress)
                 {
                     this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
                     return;
                 }
 
-                var scopes = ParseScopes(scope);
+                string[] args = JsonHelper.Deserialize<string[]>(options);
+                string scope = String.Join(",", fetchPermissionList(args));
 
                 Deployment.Current.Dispatcher.BeginInvoke(async () =>
                 {
-                    session = await FacebookSessionClient.LoginAsync(scopes);
-                    if (string.IsNullOrEmpty(session.AccessToken))
-                        this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
-                    else
+                    try
                     {
-                        RemoveLocalData();
-                        Settings.Add("access_token", session.AccessToken);
-                        Settings.Add("access_expires", session.Expires);
-                        Settings.Save();
+                        session = await FacebookSessionClient.LoginAsync(scope);
+                        if (string.IsNullOrEmpty(session.AccessToken))
+                            this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Failed to login."));
+                        else
+                        {
+                            RemoveLocalData();
+                            Settings.Add("access_token", session.AccessToken);
+                            Settings.Add("access_expires", session.Expires);
+                            Settings.Save();
 
-                        this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, this.getResponse()));
+                            this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, this.getResponse()));
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        this.DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Failed to login."));
                     }
                 });
             }
@@ -178,19 +184,38 @@ namespace org.apache.cordova.facebook
             }
         }
 
-        public void getLoginStatus(string args)
+        public void getLoginStatus(string options)
         {
             try
             {
-                if (session != null)
-                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, this.getResponse()));
+                string[] args = JsonHelper.Deserialize<string[]>(options);
+                string callbackId = args[0];
+
+                if (FacebookSessionClient != null)
+                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.OK, this.getResponse()), callbackId);
                 else
-                    this.DispatchCommandResult(new PluginResult(PluginResult.Status.NO_RESULT));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Must call init before getLoginStatus."));
             }
             catch (Exception ex)
             {
                 this.DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION, ex.Message));
             }
         }
+
+        private string[] fetchPermissionList(string[] args)
+        {
+            if (args.Length < 1)
+            {
+                // there are no permissions
+                return new string[0];
+            }
+
+            // Let's fetch all except the last element of the array. We don't need the last element of array, because it is a callbackId.
+            int arrayLength = args.Length - 1;
+            string[] result = new string[arrayLength];
+            Array.Copy(args, result, arrayLength);
+            return result;
+        }
+
     }
 }
