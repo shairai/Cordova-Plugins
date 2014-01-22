@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.phonegap.plugins.facebookconnect.wp8"
+    version="0.4.0">
+
+    <name>Facebook Connect</name>
+    
+    <description>
+      &lt;p&gt;This facebook plugin uses Facebook SDK for .NET and compatible with FacebookConnect plugin.&lt;/p&gt;
+    </description>
+    
+    <license>Apache 2.0</license>
+
+    <engines>
+      <engine name="cordova" version=">=3.0.0" />
+    </engines>
+    
+    <!-- wp8 -->
+    <platform name="wp8">
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="org.apache.cordova.facebook.Connect">
+                <param name="wp-package" value="org.apache.cordova.facebook.Connect" />
+            </feature>
+        </config-file>
+
+        <!-- cordova plugin src files -->
+        <source-file src="Facebook/Connect.cs" />
+    </platform>
+    
+</plugin>
