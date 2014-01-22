@@ -39,24 +39,25 @@ These will download the nuget packages and install the SDK into your project and
 
 7. Finally add the following code below the previous code you add to start Facebook api:
 <pre>
-<script>
+
       // Initialize the Facebook SDK
       document.addEventListener('deviceready', function() {
           FB.init({
               appId: 'appid',
               nativeInterface: CDV.FB,
-              useCachedDialogs: false
+              useCachedDialogs: false,
+              status: false
           });
       
-          FB.getLoginStatus(function(status)
-		  {
-			alert(status);
-		  });
+          FB.getLoginStatus(function(response)
+		      {
+			       alert(response.status);
+		      });
       
-		  FB.login(null, {scope: 'email'});
+		      FB.login(null, {scope: 'email'});
 	  
       });
-  </script>
+
   </pre>
 
 
